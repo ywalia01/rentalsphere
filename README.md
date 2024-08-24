@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title></title>
+<title>Rentalsphere</title>
 </head>
 <body>
   <div class="container" >
@@ -27,8 +27,6 @@
       </div>
     </div>
 </div>
-
-
 
 <h3>Feature: Registration/Login</h3>
 
@@ -85,7 +83,6 @@ Scenario: Property manager adds further properties
     Then the property manager should be able to add the property without admin approval
     And the newly added property should be immediately visible on the website
 
-
 <h3>Feature: Tenant Requests</h3>
 
 Scenario: User applies for a property posting
@@ -141,7 +138,6 @@ Scenario: Admin declines property request
     Given the admin decides to decline a property request
     Then the property associated with the request should not be approved or posted on the website
 
-
 <h3>Feature: Lease Management</h3>
 
 Scenario: Property manager adds a new lease
@@ -169,7 +165,6 @@ Scenario: Tenant views property lease
     Given a tenant is connected to a property
     When the tenant views the property details
     Then the tenant should be able to view the lease details for that property
-
 
 <h3>Feature: Announcements</h3>
 
@@ -220,7 +215,6 @@ Scenario: Tenant expresses interest in buying an item
     When the tenant clicks on the item for more details
     Then the tenant should be redirected to their mail application with the receiver set as the posting tenant's email address for further communication
 
-
 <h3>Feature: Violation Log System</h3>
 
 Scenario: Property manager logs a violation
@@ -253,7 +247,6 @@ Scenario: Tenant views dashboard analytics
     When the tenant accesses their dashboard
     Then the tenant should be able to see an overview of all related features, such as property details, marketplace, violation log, etc.
     And clicking on each feature should allow the tenant to navigate to that specific feature for further details and actions
-
 
 ## Dependency
 
