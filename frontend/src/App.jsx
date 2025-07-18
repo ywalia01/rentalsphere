@@ -6,38 +6,38 @@ import AppRoutes from "./AppRoutes.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthProvider.jsx";
 import { AppProvider } from "./context/AppProvider.jsx";
-// import useAppContext from "./hooks/useAppContext.jsx";
-import { ToastContainer } from "react-toastify";
+import useAppContext from "./hooks/useAppContext.jsx";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const { showAlert, setShowAlert, alertMode, alertDesc } = useAppContext();
 
   return (
     <BrowserRouter>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
       <AuthProvider>
         <AppProvider>
           <div className="flex-col min-h-screen h-screen justify-between">
             <Navbar />
             <div className="min-h-full">
+              {alertMode &&
+                alertMode !== "" &&
+                alertDesc &&
+                alertDesc !== "" && (
+                  <div className="toast toast-top toast-end">
+                    <div
+                      className={`alert ${
+                        alertMode === "error" ? "alert-info" : "alert-success"
+                      }`}
+                    >
+                      <span>{alertDesc}</span>
+                    </div>
+                  </div>
+                )}
               <AppRoutes />
             </div>
             <Footer />
           </div>
-          <ToastContainer />
         </AppProvider>
       </AuthProvider>
-      <ToastContainer />
     </BrowserRouter>
   );
 }

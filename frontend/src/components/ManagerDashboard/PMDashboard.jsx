@@ -65,7 +65,7 @@ function PMDashboard() {
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
-      <div className="w-1/5 p-4 bg-white drop-shadow-md">
+      <div className="w-1/4 p-4 bg-white drop-shadow-md">
         <h2 className="text-lg font-bold mb-10 mt-6">
           Property Manager Dashboard
         </h2>

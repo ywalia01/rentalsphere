@@ -13,7 +13,7 @@ const TenantRequests = () => {
   // }, []);
 
   // const loadRequests = async () => {
-  //   const result = await Axios.get("http://172.17.3.125:8000/request");
+  //   const result = await Axios.get("http://localhost:8000/request");
   //   setRequestsData(result.data);
   // };
   return (
@@ -39,15 +39,8 @@ const TenantRequests = () => {
               <div className="collapse-title text-[16px] font-semibold">
                 <div className="flex justify-between items-center">
                   <p className="text-[20px]">{data.requestSubject}</p>
-
-                  <div className="flex gap-4">
-                    <div className="bg-white rounded-full px-8 py-2">
-                      {data.date}
-                    </div>
-
-                    <div className="bg-white rounded-full px-8 py-2">
-                      {data.requestType}
-                    </div>
+                  <div className="bg-white rounded-full px-8 py-2">
+                    type
                   </div>
                 </div>
               </div>

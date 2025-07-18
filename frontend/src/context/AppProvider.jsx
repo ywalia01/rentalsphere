@@ -17,38 +17,28 @@ export const AppProvider = ({ children }) => {
   // For Property Manager Requests for Admin
   const [allPMReqs, setAllPMReqs] = useState([]);
 
-  const [contProp, setContProp] = useState("");
+  useEffect(() => {
+    if (showAlert) {
+      // Set a timeout to hide the toast after 3 seconds
+      const timeoutId = setTimeout(() => {
+        setShowAlert(false);
+        console.log("showAlert offed", showAlert);
+      }, 3000);
 
-  const [contTenantEmail, setContTenantEmail] = useState("");
+      // // Clean up the timeout if the component unmounts or showAlert changes
+      return () => clearTimeout(timeoutId);
+    }
+  }, [showAlert]);
 
-  const [contTenant, setContTenant] = useState({});
+  useEffect(() => {
+    setShowAlert(true);
+  }, []);
 
-  const [contReq, setContReq] = useState({});
-
-  const [singlePost, setSinglePost] = useState({});
-
-  // useEffect(() => {
-  //   if (showAlert) {
-  //     // Set a timeout to hide the toast after 3 seconds
-  //     const timeoutId = setTimeout(() => {
-  //       setShowAlert(false);
-  //       console.log("showAlert offed", showAlert);
-  //     }, 3000);
-
-  //     // // Clean up the timeout if the component unmounts or showAlert changes
-  //     return () => clearTimeout(timeoutId);
-  //   }
-  // }, [showAlert]);
-
-  // useEffect(() => {
-  //   setShowAlert(true);
-  // }, []);
-
-  // useEffect(() => {
-  //   if (showAlert) {
-  //     console.log("showAlert updated", showAlert);
-  //   }
-  // }, [showAlert]);
+  useEffect(() => {
+    if (showAlert) {
+      console.log("showAlert updated", showAlert);
+    }
+  }, [showAlert]);
 
   return (
     <AppContext.Provider
@@ -69,16 +59,6 @@ export const AppProvider = ({ children }) => {
         setSingleListing,
         allPMReqs,
         setAllPMReqs,
-        contProp,
-        setContProp,
-        contTenantEmail,
-        setContTenantEmail,
-        contTenant,
-        setContTenant,
-        contReq,
-        setContReq,
-        singlePost,
-        setSinglePost,
       }}
     >
       {children}

@@ -1,8 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
-import { toast, Bounce } from "react-toastify";
 import useAuth from "../../hooks/useAuth.jsx";
-const NEW_PM_URL = "http://172.17.3.125:8080/api/v1/property/register";
+const NEW_PM_URL = import.meta.env.VITE_BACKEND_URL + "/property/register";
 
 const testFormValues = {
   // email: "",
@@ -44,7 +43,7 @@ const NewPropertyManager = () => {
   const { auth } = useAuth();
   const moveInDateRef = useRef();
 
-  const [formData, setFormData] = useState(initialValues);
+  const [formData, setFormData] = useState(testFormValues);
   const [files, setFiles] = useState([]);
 
   const handleFileUpload = (e) => {

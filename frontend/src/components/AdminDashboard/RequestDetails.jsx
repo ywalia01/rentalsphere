@@ -1,36 +1,39 @@
 import Axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
 
 const RequestDetails = () => {
-  const { contReq } = useAuth();
   const navigate = useNavigate();
   let { id } = useParams();
-  const [currReq, setCurrReq] = useState({});
 
-  // const [propertyManagerReq, setPropertyManagerReq] = useState([]);
-  // useEffect(() => {
-  //   loadPropertyManagerReq();
-  // }, []);
-
+  const [propertyManagerReq, setPropertyManagerReq] = useState([]);
   useEffect(() => {
-    if (contReq && contReq.email) {
-      setCurrReq();
-    }
-  }, [contReq]);
+    loadPropertyManagerReq();
+  }, []);
 
   const loadPropertyManagerReq = async () => {
     const result = await Axios.get(
-      `http://172.17.3.125:8000/property-managers/${id}`
+      `http://localhost:8000/property-managers/${id}`
     );
     setPropertyManagerReq(result.data);
   };
 
   const handleApprove = async (id) => {
     try {
-      await Axios.patch(`http://172.17.3.125:8000/property-managers/${id}`, {
+      await Axios.patch(`http://localhost:8000/property-managers/${id}`, {
         verified: true,
+      });
+      alert("Form submitted successfully!");
+      navigate("/admin");
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
+  };
+
+  const handleCancel = async (id) => {
+    try {
+      await Axios.patch(`http://localhost:8000/property-managers/${id}`, {
+        verified: false,
       });
       alert("Form submitted successfully!");
       navigate("/admin");

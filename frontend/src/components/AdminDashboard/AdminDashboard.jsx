@@ -6,18 +6,20 @@ import useAuth from "../../hooks/useAuth.jsx";
 import useAppContext from "../../hooks/useAppContext.jsx";
 import { toast, Bounce } from "react-toastify";
 import LoadingSpinner from "../../assets/LoadingSpinner.jsx";
-const ALL_PMREQS_URL = "http://172.17.3.125:8080/api/v1/admin/properties";
-const PMREQ_APPROVE_URL = "http://172.17.3.125:8080/api/v1/admin/approve/";
-const PMREQ_REJECT_URL = "http://172.17.3.125:8080/api/v1/admin/reject/";
+const ALL_PMREQS_URL = import.meta.env.VITE_BACKEND_URL + "/admin/properties";
+const PMREQ_APPROVE_URL = import.meta.env.VITE_BACKEND_URL + "/admin/approve/";
+const PMREQ_REJECT_URL = import.meta.env.VITE_BACKEND_URL + "/admin/reject/";
 
 const AdminDashboard = () => {
-  const { auth } = useAuth();
-  const { allPMReqs, setAllPMReqs } = useAppContext();
+  const { auth, setAuth } = useAuth();
+  const { allPMReqs, setAllPMReqs, isLoading, setIsLoading } = useAppContext();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
+  const [propertyManager, setPropertyManager] = useState([]);
+  const [showDash, setShowDash] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
 
-  // const isAuthEmpty =
-  //   Object.keys(auth).length === 0 && auth.constructor === Object;
+  const isAuthEmpty =
+    Object.keys(auth).length === 0 && auth.constructor === Object;
 
   useEffect(() => {
     if (auth && auth.role && auth.role !== "ADMIN") {
@@ -67,17 +69,6 @@ const AdminDashboard = () => {
       .post(PMREQ_APPROVE_URL + email, {}, { headers })
       .then((res) => console.log("Data from handleApproveReq", res))
       .catch((err) => console.log(err));
-    toast.success("Request Approved", {
-      position: "top-center",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      transition: Bounce,
-    });
     fetchPMReqs();
   };
 
@@ -90,24 +81,12 @@ const AdminDashboard = () => {
       .post(PMREQ_REJECT_URL + email, {}, { headers })
       .then((res) => console.log("Data from handleRejectReq", res))
       .catch((err) => console.log(err));
-    toast.success("Request Rejected", {
-      position: "top-center",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      transition: Bounce,
-    });
     fetchPMReqs();
   };
 
-  // const handleViewDetails = async (pmReq, index) => {
-  //   setCont
-  //   navigate(`/admin/${index}`);
-  // };
+  const handleViewDetails = async (id) => {
+    navigate(`/admin/${id}`);
+  };
 
   return (
     <>
@@ -141,11 +120,11 @@ const AdminDashboard = () => {
                 <th className="px-4 py-2">Date</th>
                 <th className="px-4 py-2">ID Number</th>
                 <th className="px-4 py-2">Approve/Reject Requests</th>
-                {/* <th className="px-4 py-2">View Details</th> */}
+                <th className="px-4 py-2">View Details</th>
               </tr>
             </thead>
             <tbody>
-              {!isLoading && allPMReqs ? (
+              {!isLoading &&
                 allPMReqs?.map((pmReq, index) => (
                   <tr key={index}>
                     {/* <td className="px-4 py-2 border">{pmReq.id}</td> */}
@@ -180,19 +159,16 @@ const AdminDashboard = () => {
                         Reject
                       </button>
                     </td>
-                    {/* <td className="px-4 py-2 border">
+                    <td className="px-4 py-2 border">
                       <button
-                        onClick={() => handleViewDetails(pmReq, index)}
+                        onClick={() => handleViewDetails(index)}
                         className="px-4 py-2 mr-2 font-bold text-white bg-black rounded"
                       >
                         View
                       </button>
-                    </td> */}
+                    </td>
                   </tr>
-                ))
-              ) : (
-                <p>There are no Property Manger Requests at the moment</p>
-              )}
+                ))}
             </tbody>
           </table>
         </div>

@@ -22,7 +22,7 @@ const TenantNewRequest = () => {
   const sendNewRequest = async () => {
     try {
       const result = await Axios.post(
-        "http://172.17.3.125:8000/request",
+        "http://localhost:8000/request",
         requestData
       );
       console.log(result, "resultresult");
@@ -65,20 +65,6 @@ const TenantNewRequest = () => {
             onChange={(e) => handleInputChange(e)}
             placeholder="Type"
             name="requestType"
-            className="input input-bordered w-full "
-          />
-        </div>
-
-        <div className="flex flex-col gap-2 mt-4">
-          <label htmlFor="" className="font-medium text-[16px]">
-            Request date
-          </label>
-          <input
-            type="date"
-            value={requestData.requestType}
-            onChange={(e) => handleInputChange(e)}
-            placeholder="date"
-            name="date"
             className="input input-bordered w-full "
           />
         </div>

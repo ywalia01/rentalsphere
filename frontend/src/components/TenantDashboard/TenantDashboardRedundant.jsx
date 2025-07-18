@@ -36,12 +36,12 @@ const TenantDashboard = () => {
   }, []);
 
   const loadRequests = async () => {
-    const result = await Axios.get("http://172.17.3.125:8000/request");
+    const result = await Axios.get("http://localhost:8000/request");
     setRequestsData(result.data);
   };
 
   const loadAnnouncements = async () => {
-    const result = await Axios.get("http://172.17.3.125:8000/announcements");
+    const result = await Axios.get("http://localhost:8000/announcements");
     setAnnouncementsData(result.data);
   };
 

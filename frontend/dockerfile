@@ -5,10 +5,10 @@ FROM node:latest AS build
 WORKDIR /app
 
 # Copy package.json and package-lock.json to install dependencies
-COPY package.json .
+COPY package.json ./
 
 # Install dependencies
-RUN npm install --verbose
+RUN npm install
 
 # Copy the application code
 COPY . .
@@ -16,6 +16,14 @@ COPY . .
 # Build the React + Vite application
 RUN npm run build
 
-EXPOSE 5173
+# Use Nginx to serve the built files
+FROM nginx:alpine AS final
 
-CMD [ "npm", "run", "preview" ]
+# Copy the built files from the build stage to the Nginx directory
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Expose port 80 to allow external access
+EXPOSE 80
+
+# Start Nginx server
+CMD ["nginx", "-g", "daemon off;"]
