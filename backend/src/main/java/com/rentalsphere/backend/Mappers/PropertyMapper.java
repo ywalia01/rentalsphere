@@ -3,20 +3,28 @@ package com.rentalsphere.backend.Mappers;
 import com.rentalsphere.backend.DTOs.PropertiesDTO;
 import com.rentalsphere.backend.DTOs.PropertyDTO;
 import com.rentalsphere.backend.Property.Model.Property;
-import com.rentalsphere.backend.Tenant.Model.Tenant;
-import com.rentalsphere.backend.User.Model.User;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class PropertyMapper {
-    public static List<PropertyDTO> convertToPropertiesDTO(List<Property> properties) {
-        List<PropertyDTO> propertyDTOs = new ArrayList<>();
+    public static List<PropertiesDTO> convertToPropertiesDTO(List<Property> properties) {
+        List<PropertiesDTO> propertiesDTOs = new ArrayList<>();
         properties.forEach(property -> {
-            propertyDTOs.add(convertToPropertyDTO(property));
+            propertiesDTOs.add(
+                    new PropertiesDTO(
+                            property.getPropertyApplicationID(),
+                            property.getEmailAddress(),
+                            property.getPropertyDescription(),
+                            property.getPhoneNumber(),
+                            property.getMonthlyRent(),
+                            property.getNumBedrooms(),
+                            property.getNumBedrooms(),
+                            property.getPropertyImages().get(0).getImageUrl()
+                    ));
         });
-        return propertyDTOs;
+        return propertiesDTOs;
     }
 
     public static PropertyDTO convertToPropertyDTO(Property property) {
@@ -36,21 +44,5 @@ public class PropertyMapper {
                 property.getNumBedrooms(),
                 property.getPropertyImages().stream().map(image -> image.getImageUrl()).collect(Collectors.toList())
         );
-    }
-
-    public static List<PropertyDTO> convertToPropertiesWithTenant(List<Property> properties) {
-        List<PropertyDTO> propertyDTOs = new ArrayList<>();
-        properties.forEach(property -> {
-            Tenant tenant = property.getTenants().get(0);
-            User user = tenant.getUser();
-            propertyDTOs.add(new PropertyDTO(
-                            property.getPropertyApplicationID(),
-                            property.getPropertyAddress(),
-                            user.getFirstName() + " " + user.getLastName(),
-                            tenant
-                    )
-            );
-        });
-        return propertyDTOs;
     }
 }

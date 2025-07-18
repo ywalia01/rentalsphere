@@ -6,6 +6,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -24,8 +25,33 @@ public class EmailService implements IEmailService {
     private final JavaMailSender mailSender;
     private final SpringTemplateEngine templateEngine;
 
-    private final static String URL = "http://localhost:5173";
+    private final static String URL = "http://127.0.0.1:5173";
 
+    /**
+     * @param to      - receiver email
+     * @param subject - subject of email
+     * @param body    - body of email
+     */
+    @Override
+    public void sendEmail(String to, String subject, String body) {
+        // setting details for mail transfer
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(body);
+
+        // send mail
+        mailSender.send(message);
+    }
+
+    /**
+     * @param emailType    - type of email template
+     * @param to           - receiver email
+     * @param subject      - email subject
+     * @param name         - name of receiver
+     * @param emailMessage - message to add in email body
+     * @throws MessagingException - exception thrown by MimeMessage
+     */
     @Async
     @Override
     public void sendEmailTemplate(EmailType emailType, String to, String subject, String name, String emailMessage, String token) throws MessagingException {

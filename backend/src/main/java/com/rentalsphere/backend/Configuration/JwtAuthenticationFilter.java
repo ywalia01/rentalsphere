@@ -20,7 +20,6 @@ import java.io.IOException;
 public class JwtAuthenticationFilter  extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
-    private static final int beginIndex = 7;
 
 
     @Override
@@ -33,7 +32,7 @@ public class JwtAuthenticationFilter  extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        jwt = authHeader.substring(beginIndex);
+        jwt = authHeader.substring(7);
         userEmail = jwtService.extractUsername(jwt);
         if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);

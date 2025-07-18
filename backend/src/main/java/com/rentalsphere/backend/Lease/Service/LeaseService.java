@@ -1,11 +1,8 @@
 package com.rentalsphere.backend.Lease.Service;
 
 import com.rentalsphere.backend.DTOs.LeaseDTO;
-import com.rentalsphere.backend.Enums.ApplicationStatus;
 import com.rentalsphere.backend.Enums.LeaseStatus;
-import com.rentalsphere.backend.Exception.Lease.LeaseNotFoundException;
 import com.rentalsphere.backend.Exception.Property.PropertyNotFoundException;
-import com.rentalsphere.backend.Exception.Tenant.TenantNotFoundException;
 import com.rentalsphere.backend.Exception.User.UserNotFoundException;
 import com.rentalsphere.backend.Lease.Model.Lease;
 import com.rentalsphere.backend.Lease.Repository.LeaseRepository;
@@ -134,29 +131,6 @@ public class LeaseService implements ILeaseService {
         return LeaseResponse.builder()
                 .isSuccess(true)
                 .message("lease removed.")
-                .timeStamp(new Date())
-                .build();
-    }
-
-    @Override
-    public GetLeaseResponse getLeaseForTenant(String email) {
-        Optional<Tenant> tenant = tenantRepository.findByEmailAddressAndApplicationStatus(email, ApplicationStatus.APPROVED);
-
-        if(!tenant.isPresent()){
-            throw new TenantNotFoundException("No such tenant exists.");
-        }
-
-        Optional<Lease> lease = leaseRepository.findByTenantAndLeaseStatus(tenant.get(), LeaseStatus.ACTIVE);
-
-        if(!lease.isPresent()){
-            throw new LeaseNotFoundException("No lease found.");
-        }
-
-        LeaseDTO leaseDTO = LeaseMapper.convertToLeaseDTO(lease.get(), lease.get().getTenant(), lease.get().getTenant().getUser());
-
-        return GetLeaseResponse.builder()
-                .isSuccess(true)
-                .lease(leaseDTO)
                 .timeStamp(new Date())
                 .build();
     }

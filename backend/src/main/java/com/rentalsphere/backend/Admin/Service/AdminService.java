@@ -18,7 +18,6 @@ import com.rentalsphere.backend.DTOs.PropertyManagerDTO;
 import com.rentalsphere.backend.Mappers.UserMapper;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -26,13 +25,9 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class AdminService implements IAdminService {
-    @Autowired
     private final PropertyRepository propertyRepository;
-    @Autowired
     private final UserRepository userRepository;
-    @Autowired
     private final RoleRepository roleRepository;
-    @Autowired
     private final EmailService emailService;
 
     @Override

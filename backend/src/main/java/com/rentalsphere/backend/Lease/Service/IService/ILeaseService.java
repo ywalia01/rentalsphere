@@ -13,5 +13,4 @@ public interface ILeaseService {
     public GetLeaseResponse getLeaseById(Long id);
     public LeaseResponse updateLease(UpdateLeaseRequest request) throws ParseException;
     public LeaseResponse removeLease(Long id);
-    public GetLeaseResponse getLeaseForTenant(String email);
 }

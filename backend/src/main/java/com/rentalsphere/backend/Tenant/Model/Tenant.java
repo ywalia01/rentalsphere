@@ -1,33 +1,30 @@
 package com.rentalsphere.backend.Tenant.Model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rentalsphere.backend.Enums.ApplicationStatus;
-import com.rentalsphere.backend.Lease.Model.Lease;
-import com.rentalsphere.backend.Marketplace.Model.Post;
 import com.rentalsphere.backend.Property.Model.Property;
 import com.rentalsphere.backend.User.Model.User;
-import com.rentalsphere.backend.ViolationLog.Model.ViolationLog;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.*;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.util.Date;
-import java.util.List;
+import java.util.UUID;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter@Setter
+@Data
 @Entity(name = "TenantApplications")
 @Table(name = "TenantApplications")
 public class Tenant {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "TenantID")
-    private Long tenantID;
+    private UUID tenantID;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "userID", referencedColumnName = "id")
     private User user;
@@ -84,19 +81,9 @@ public class Tenant {
     @Column(name = "CreationDate", nullable = false)
     private Date creationDate;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "property_id", referencedColumnName = "PropertyApplicationID") // This is the foreign key column in PropertyApplications table
     private Property property;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "tenant")
-    private List<Lease> leaseList;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "tenant")
-    private List<Post> posts;
-
-    @OneToMany(mappedBy = "tenant")
-    private List<ViolationLog> violationLogs;
 }

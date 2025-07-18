@@ -1,21 +1,20 @@
 package com.rentalsphere.backend.Authentication.Controller;
 
-import com.rentalsphere.backend.Authentication.Service.IService.IAuthenticationService;
+import com.rentalsphere.backend.Authentication.Service.AuthenticationService;
 import com.rentalsphere.backend.RequestResponse.Authentication.*;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/v1/auth")
 public class AuthenticationController{
-    @Autowired
-    private final IAuthenticationService authenticationService;
+    private final AuthenticationService authenticationService;
 
     @PostMapping(path = "/register")
     public ResponseEntity<AuthenticationResponse> register(@Valid @RequestBody RegisterRequest request){
@@ -24,7 +23,7 @@ public class AuthenticationController{
 
     @PostMapping(path = "/login")
     public ResponseEntity<AuthenticationResponse> login(@Valid @RequestBody LoginRequest request){
-        return new ResponseEntity<>(authenticationService.login(request), HttpStatus.OK);
+        return new ResponseEntity<>(authenticationService.login(request), HttpStatus.CREATED);
     }
 
     @PostMapping(path = "/forgotpassword")

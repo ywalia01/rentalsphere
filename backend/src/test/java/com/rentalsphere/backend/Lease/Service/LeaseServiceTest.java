@@ -3,9 +3,7 @@ package com.rentalsphere.backend.Lease.Service;
 import com.rentalsphere.backend.DTOs.LeaseDTO;
 import com.rentalsphere.backend.Enums.ApplicationStatus;
 import com.rentalsphere.backend.Enums.LeaseStatus;
-import com.rentalsphere.backend.Exception.Lease.LeaseNotFoundException;
 import com.rentalsphere.backend.Exception.Property.PropertyNotFoundException;
-import com.rentalsphere.backend.Exception.Tenant.TenantNotFoundException;
 import com.rentalsphere.backend.Exception.User.UserNotFoundException;
 import com.rentalsphere.backend.Lease.Model.Lease;
 import com.rentalsphere.backend.Lease.Repository.LeaseRepository;
@@ -35,11 +33,6 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class LeaseServiceTest {
-
-    final double monthlyRent = 2500.00;
-    final int leaseTermMonth = 12;
-    final int numOfOccupants = 2;
-    final int numBedrooms = 2;
     @InjectMocks
     private LeaseService leaseService;
     @Mock
@@ -82,9 +75,9 @@ public class LeaseServiceTest {
                 .city("some city")
                 .state("some state")
                 .zipCode("zip")
-                .monthlyRent(monthlyRent)
+                .monthlyRent(2500.00)
                 .availableMoveInDate(new Date())
-                .numBedrooms(numBedrooms)
+                .numBedrooms(2)
                 .numBathrooms(1)
                 .propertyDescription("some description")
                 .applicationStatus(ApplicationStatus.APPROVED)
@@ -100,8 +93,8 @@ public class LeaseServiceTest {
                 .socialSecurityNumber("1234567890")
                 .streetAddress("some street")
                 .desiredMoveInDate(new Date())
-                .leaseTermMonths(leaseTermMonth)
-                .numOccupants(numOfOccupants)
+                .leaseTermMonths(12)
+                .numOccupants(2)
                 .currentEmployer("some employer")
                 .lengthOfEmployment(1)
                 .applicationStatus(ApplicationStatus.APPROVED)
@@ -112,14 +105,14 @@ public class LeaseServiceTest {
                 .id(1L)
                 .startDate(new Date())
                 .endDate(new Date())
-                .monthlyRent(monthlyRent)
+                .monthlyRent(2500.00)
                 .leaseStatus(LeaseStatus.ACTIVE)
                 .leasePdf("pdf url")
                 .tenant(tenant)
                 .property(property)
                 .build();
-        leaseRequest = new LeaseRequest("2024-03-10", "2025-03-10", monthlyRent, file, LeaseStatus.ACTIVE.name(), 1L, 1L);
-        updateLeaseRequest = new UpdateLeaseRequest(1L,"2024-03-10", "2025-03-10", monthlyRent, LeaseStatus.INACTIVE);
+        leaseRequest = new LeaseRequest("2024-03-10", "2025-03-10", 2500.00, file, LeaseStatus.ACTIVE.name(), 1L, 1L);
+        updateLeaseRequest = new UpdateLeaseRequest(1L,"2024-03-10", "2025-03-10", 2500.00, LeaseStatus.INACTIVE);
     }
 
     @Test
@@ -227,44 +220,5 @@ public class LeaseServiceTest {
 
         verify(leaseRepository).deleteById(anyLong());
         assertTrue(response.isSuccess());
-    }
-
-    @Test
-    void testGetLeaseForTenant(){
-        GetLeaseResponse expectedResponse = GetLeaseResponse.builder()
-                .isSuccess(true)
-                .lease(leaseDTO)
-                .timeStamp(new Date())
-                .build();
-        GetLeaseResponse actualResponse;
-
-        when(tenantRepository.findByEmailAddressAndApplicationStatus(anyString(), any(ApplicationStatus.class))).thenReturn(Optional.ofNullable(tenant));
-        when(leaseRepository.findByTenantAndLeaseStatus(any(Tenant.class), any(LeaseStatus.class))).thenReturn(Optional.ofNullable(lease));
-
-        try(MockedStatic<LeaseMapper> leaseMapper = mockStatic(LeaseMapper.class)){
-            leaseMapper.when(()->LeaseMapper.convertToLeaseDTO(any(Lease.class), any(Tenant.class), any(User.class))).thenReturn(leaseDTO);
-            actualResponse = leaseService.getLeaseForTenant("test@gmail.com");
-        }
-
-        assertEquals(expectedResponse, actualResponse);
-    }
-
-    @Test
-    void testGetLeaseForTenantNotFoundException(){
-        when(tenantRepository.findByEmailAddressAndApplicationStatus(anyString(), any(ApplicationStatus.class))).thenReturn(Optional.empty());
-
-        assertThrows(TenantNotFoundException.class, ()->{
-            leaseService.getLeaseForTenant("test@gmail.com");
-        });
-    }
-
-    @Test
-    void testGetLeaseForTenantLeaseNotFoundException(){
-        when(tenantRepository.findByEmailAddressAndApplicationStatus(anyString(), any(ApplicationStatus.class))).thenReturn(Optional.of(tenant));
-        when(leaseRepository.findByTenantAndLeaseStatus(any(Tenant.class), any(LeaseStatus.class))).thenReturn(Optional.empty());
-
-        assertThrows(LeaseNotFoundException.class, ()->{
-            leaseService.getLeaseForTenant("test@gmail.com");
-        });
     }
 }
